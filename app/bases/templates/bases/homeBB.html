@@ -1,0 +1,159 @@
+{% extends 'base/base.html' %}
+
+{% block page_content %}
+<style>
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        border: none;
+        position: relative;
+        margin-bottom: 30px;
+        box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,0.1), 0 0.9375rem 1.40625rem rgba(90,97,105,0.1), 0 0.25rem 0.53125rem rgba(90,97,105,0.12), 0 0.125rem 0.1875rem rgba(90,97,105,0.1);
+    }
+    .l-bg-blue-dark {
+        background: linear-gradient(to right, #373b44, #4286f4) !important;
+        color: #fff;
+    }
+    .card .card-statistic-3 .card-icon-large .fas {
+        font-size: 70px;
+    }
+    .card .card-statistic-3 .card-icon {
+        text-align: center;
+        line-height: 50px;
+        margin-left: 15px;
+        color: #000;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        opacity: 0.1;
+    }
+    .card .card-statistic-3 .card-title {
+        text-transform: capitalize;
+        font-size: 1rem;
+        font-weight: normal;
+        margin-bottom: 0;
+    }
+    .card .card-statistic-3 .mb-0 {
+        font-size: 1.5rem;
+        font-weight: normal;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        {% if user.is_authenticated and not user.is_superuser %}
+            {% if solicitudes_totales is not None %}
+                <div class="col-md-6 col-lg-6">
+                    <div class="card l-bg-blue-dark" style="height: 120px;">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large"><i class="fas fa-pen"></i></div>
+                            <div class="mb-4">
+                                <h5 class="card-title mb-0">{{ title_totales }}</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 d-flex">
+                                <div class="col-8">
+                                    <h2 class="d-flex align-items-center mb-0">
+                                        {{ solicitudes_totales }}
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="col-12">
+                <h2>Bienvenido al panel de administración</h2>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% comment %} {% extends 'base/base.html' %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row x_title d-flex align-items-center justify-content-between mb-4">
+            <div class="col-md-6">
+                <h1>Bienvenido, {{ user.username }}</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <div id="reportrange" class="btn btn-light" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                    <span>{{ fecha_actual }}</span> <b class="caret"></b>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if es_empleado %}
+            <!-- Primera Tarjeta -->
+            <div class="col-lg-6 mb-4">
+                <div class="card border-left-info shadow" style="border-radius: 10px; border: 2px solid #3498db; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            {% if tiene_solicitudes %}
+                            <div style="flex: 1;">
+                                <h5 class="font-weight-bold text-info mb-3">{{ title_ultima }}</h5>
+                                <p class="text-muted mb-1">Fecha: {{ ultima_solicitud.DocDate }}</p>
+                                <p class="text-muted mb-1">Número de Selecciones: {{ cant_ultima_solicitud }} / Tipo: {{ tipoDoc }}</p>
+                                <p class="mb-1">Estado: <span class="badge bg-warning text-dark" style="font-size: 1em; padding: 5px 10px; border-radius: 5px;">{{ estado }}</span></p>
+                                <p class="mb-1">Moneda: {{ ultima_solicitud.moneda.MonedaAbrev }}</p>
+                                <p class="font-weight-bold">Total: S/. {{ ultima_solicitud.TotalImp }}</p>
+                            </div>
+                            {% else %}
+                            <div style="flex: 1;">
+                                <h5 class="font-weight-bold text-info mb-3">{{ title_ultima }}</h5>
+                                <p class="text-muted mb-1">No se ha registrado una última solicitud.</p>
+                            </div>
+                            {% endif %}
+                            <div class="col-auto d-flex align-items-center" style="font-size: 4em;">
+                                <i class="fas fa-clipboard text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segunda Tarjeta -->
+            <div class="col-lg-6 mb-4">
+                <div class="card bg-primary text-white shadow" style="border-radius: 10px; border: 2px solid #2ecc71; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="font-weight-bold">{{ title_totales }}</h5>
+                            <h2>{{ solicitudes_totales }}</h2>
+                        </div>
+                        <div style="font-size: 4em;">
+                            <i class="fas fa-pen text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Tarjeta para Otros Usuarios -->
+            <div class="col-lg-12 mb-4">
+                <div class="card border-left-info shadow" style="border-radius: 10px; border: 2px solid #3498db; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div style="flex: 1;">
+                            <h5 class="font-weight-bold text-info mb-3">{{ title_ultima }}</h5>
+                            <p class="text-muted mb-1">Fecha: {{ ultima_solicitud.DocDate }}</p>
+                            <p class="text-muted mb-1">Número de Selecciones: {{ cant_ultima_solicitud }} / Tipo: {{ tipoDoc }}</p>
+                            <p class="mb-1">Estado: <span class="badge bg-warning text-dark" style="font-size: 1em; padding: 5px 10px; border-radius: 5px;">{{ estado }}</span></p>
+                            <p class="mb-1">Moneda: {{ ultima_solicitud.moneda.MonedaAbrev }}</p>
+                            <p class="font-weight-bold">Total: S/. {{ ultima_solicitud.TotalImp }}</p>
+                        </div>
+                        <div class="col-auto d-flex align-items-center" style="font-size: 4em;">
+                            <i class="fas fa-clipboard text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,20 @@
+/* :root {  */
+    /* --sidebar-bg-color: #2a3f54; /* Color de fondo de la sidebar  */
+    /*--sidebar-text-color: white;  Color del texto */
+
+/* } */
+
+/* body {
+    --bs-body-font-family: var(--bs-font-monospace);
+    --bs-body-line-height: 1.4;
+    --bs-body-bg: var(--bs-gray-100);
+}  */
+/* Aplicación de las variables a la sidebar */
+/* .app-sidebar {
+    background-color: var(--sidebar-bg-color)!important;
+    color: var(--sidebar-text-color)!important;
+} */
+
+/* .menu-content {
+    color: #ffffff !important;
+} */

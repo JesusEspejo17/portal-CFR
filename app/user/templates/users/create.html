@@ -1,0 +1,428 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'users/js/list.js' %}"></script>
+{% endblock head_list %}
+
+{% block page_content %}
+
+<div class="card">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-6">
+        <div class="card-title">
+            <h3 class="card-title">
+                <i class="fas fa-user-plus"></i> Crear Usuario
+            </h3>
+        </div>
+    </div>
+    <!--end::Card header-->
+
+    <!-- Separador -->
+    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+    <form id="Create" action="." method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+
+        <div class="card-body">
+            <!-- Estructura de cuadrícula en dos columnas -->
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Código SAP:</label>
+                        <input type="text" name="SAP_Code" class="form-control form-control-solid" placeholder="Ingrese un Código SAP" id="idCodigoSAP"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input type="text" name="username" class="form-control form-control-solid" placeholder="Ingrese el nombre de usuario" id="idUsername" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña:</label>
+                        <input type="password" name="password" class="form-control form-control-solid" placeholder="Ingrese la contraseña" id="idPassword" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" name="first_name" class="form-control form-control-solid" placeholder="Ingrese el nombre" id="idNombre" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido:</label>
+                        <input type="text" name="last_name" class="form-control form-control-solid" placeholder="Ingrese el apellido" id="idApellido"/>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>E-mail:</label>
+                        <input type="text" name="email" class="form-control form-control-solid" placeholder="Ingrese el correo electrónico" id="idEmail" required/>
+                        <span class="form-text text-muted">Ingrese un correo válido</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Usuario:</label>
+                        <select class="form-control form-control-solid select" name="UserType" data-placeholder="Ingrese el tipo de usuario" id="idTipoUsuario" required>
+                            <option value=""></option>
+                            <option value="171">Empleado</option>
+                            <option value="12">Usuario</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen:</label>
+                        <input type="file" name="image" accept="image/*" id="idImage" class="form-control form-control-solid"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Grupos:</label>
+                        {{ form.groups }}
+                    </div>
+                    <div class="form-group" name="departamento" id="departamento">
+                        <label>Departamento:</label>
+                        {{ form.departamento }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> Guardar</button>
+            <a href="{% url 'user:userlist' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        // Inicialmente oculta el campo de departamento
+        $('#departamento').hide();
+
+        // Función para obtener el texto de la opción seleccionada
+        function getSelectedOptionText(selectElement) {
+            var selectedOption = $(selectElement).find('option:selected');
+            return selectedOption.text(); // Obtiene el texto de la opción seleccionada
+        }
+
+        // Función para mostrar/ocultar el campo de departamento basado en la selección de grupos
+        function toggleDepartamentoField() {
+            var selectedText = getSelectedOptionText('#id-groups');
+            console.log(selectedText);  // Para depuración
+            if (selectedText === 'Jefe_De_Area') {
+                $('#departamento').show();
+            } else {
+                $('#departamento').hide();
+            }
+        }
+
+        // Llama a la función cuando la página carga
+        toggleDepartamentoField();
+
+        // Llama a la función cuando cambia el valor del campo 'groups'
+        $('#id-groups').change(function() {
+            toggleDepartamentoField();
+        });
+
+        // Configura select2 para el campo 'UserType'
+        $('#idTipoUsuario').select2({
+            placeholder: function () {
+                return $(this).data('placeholder');
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+
+
+{% comment %} CODIGO UNA SOLA COLUMNA {% endcomment %}
+{% comment %} {% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'users/js/list.js' %}"></script>
+{% endblock head_list %}
+
+{% block page_content %}
+
+<div class="card">
+    <!--begin::Card header-->
+    <div class="card-header border-0 pt-6">
+        <div class="card-title">
+            <h3 class="card-title">
+                <i class="fas fa-user-plus"></i> Crear Usuario
+            </h3>
+        </div>
+    </div>
+    <!--end::Card header-->
+
+    <!-- Separador -->
+    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+    <form id="Create" action="." method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+        <div class="card-body">
+            <div class="form-group">
+                <label>Código SAP:</label>
+                <input type="text" name="SAP_Code" class="form-control form-control-solid" placeholder="Ingrese un Código SAP" id="idCodigoSAP"/>
+            </div>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" class="form-control form-control-solid" placeholder="Ingrese el nombre de usuario" id="idUsername" required/>
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" name="password" class="form-control form-control-solid" placeholder="Ingrese la contraseña" id="idPassword" required/>
+            </div>
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" name="first_name" class="form-control form-control-solid" placeholder="Ingrese el nombre" id="idNombre" required/>
+            </div>
+            <div class="form-group">
+                <label>Apellido:</label>
+                <input type="text" name="last_name" class="form-control form-control-solid" placeholder="Ingrese el apellido" id="idApellido"/>
+            </div>
+            <div class="form-group">
+                <label>E-mail:</label>
+                <input type="text" name="email" class="form-control form-control-solid" placeholder="Ingrese el correo electrónico" id="idEmail" required/>
+                <span class="form-text text-muted">Ingrese un correo válido</span>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Usuario:</label>
+                <select class="form-control form-control-solid select" name="UserType" data-placeholder="Ingrese el tipo de usuario" id="idTipoUsuario" required>
+                    <option value=""></option>
+                    <option value="171">Empleado</option>
+                    <option value="12">Usuario</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Imagen:</label>
+                <input type="file" name="image" accept="image/*" id="idImage" class="form-control form-control-solid"/>
+            </div>
+            <div class="form-group">
+                <label>Grupos:</label>
+                {{ form.groups }}
+            </div>
+            <div class="form-group" name="departamento" id="departamento">
+                <label>Departamento:</label>
+                {{ form.departamento }}
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> Guardar</button>
+            <a href="{% url 'user:userlist' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#departamento').hide();
+        function toggleDepartamentoField() {
+            var selectedText = $('#id-groups').find('option:selected').text();
+            if (selectedText === 'Jefe_De_Area') {
+                $('#departamento').show();
+            } else {
+                $('#departamento').hide();
+            }
+        }
+        toggleDepartamentoField();
+        $('#id-groups').change(toggleDepartamentoField);
+        $('#idTipoUsuario').select2({
+            placeholder: function () {
+                return $(this).data('placeholder');
+            }
+        });
+    });
+</script>
+
+{% endblock %} {% endcomment %}
+
+
+
+
+
+
+
+{% comment %} CODIGO INICIAL CON SB ADMIN {% endcomment %}
+{% comment %} {% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'users/js/list.js' %}"></script>
+{% endblock head_list %}
+
+{% block page_content %}
+
+<form id="Create" action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="add">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-boxes"></i> {{title}}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-secondary">
+            <div class="card-body">
+                {% csrf_token %}
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible">
+                    <button Type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                    <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro.</h5>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <input type="hidden" name="action" value="add">
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Código SAP: </div>
+                        <div class="col-sm-9">
+                            <input type="text" name="SAP_Code" class="form-control form-control-user"
+                                placeholder="Ingrese un Código SAP" id="idCodigoSAP">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Username: </div>
+                        <div class="col-sm-9">
+                            <input type="text" name="username" class="form-control form-control-user"
+                                placeholder="Ingrese el nombre de usuario" id="idUsername" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Contraseña: </div>
+                        <div class="col-sm-9">
+                            <input type="password" name="password" class="form-control form-control-user"
+                                placeholder="Ingrese el nombre de usuario" id="idPassword" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Nombre: </div>
+                        <div class="col-sm-9">
+                            <input type="text" name="first_name" class="form-control form-control-user"
+                                placeholder="Ingrese el nombre" id="idNombre" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Apellido: </div>
+                        <div class="col-sm-9">
+                            <input type="text" name="last_name" class="form-control form-control-user"
+                                placeholder="Ingrese el apellido" id="idApellido">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">E-mail: </div>
+                        <div class="col-sm-9">
+                            <input type="text" name="email" class="form-control form-control-user"
+                                placeholder="Ingrese el correo electrónico" id="idEmail" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Tipo de Usuario: </div>
+                        <div class="col-sm-9">
+                            <select class="form-control select" name="UserType" style="width: 100%;"
+                                data-placeholder="Ingrese el tipo de usuario" id="idTipoUsuario" required>
+                                <option value=""></option>
+                                <option value="171">Empleado </option>
+                                <option value="12">Usuario </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Imagen: </div>
+                        <div class="col-sm-9">
+                            <input type="file" name="image" accept="image/*" id="idImage">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3">
+                    <div class="row">
+                        <div class="col-sm-3">Grupos: </div>
+                        {{form.groups}}
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 mb-sm-3" name="departamento" id="departamento">
+                    <div class="row">
+                        <div class="col-sm-3">Departamento: </div>
+                        <div class="col-sm-9">
+                            {{ form.departamento }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-danger"><span class="fa fa-save"></span> Guardar</button>
+            <a href="{% url 'user:userlist' %}" class="btn btn-success">Cancelar</a>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function() {
+        // Inicialmente oculta el campo de departamento
+        $('#departamento').hide();
+
+         // Función para obtener el texto de la opción seleccionada
+         function getSelectedOptionText(selectElement) {
+            var selectedOption = $(selectElement).find('option:selected');
+            return selectedOption.text(); // Obtiene el texto de la opción seleccionada
+        }
+
+        // Función para mostrar/ocultar el campo de departamento basado en la selección de grupos
+        function toggleDepartamentoField() {
+            var selectedText = getSelectedOptionText('#id-groups');
+            console.log(selectedText);
+            if (selectedText === 'Jefe_De_Area') {
+                console.log('Mostrar');
+                $('#departamento').show();
+            } else {
+                console.log('Ocultar');
+                $('#departamento').hide();
+            }
+        }
+        // Llama a la función cuando la página carga
+        toggleDepartamentoField();
+
+        // Llama a la función cuando cambia el valor del campo 'groups'
+        $('#id-groups').change(function() {
+            console.log('Cambio');
+            toggleDepartamentoField();
+        });
+
+        // Configura select2 para el campo 'UserType'
+        $('#idTipoUsuario').select2({
+            placeholder: function () {
+                $(this).data('placeholder');
+            }
+        });
+    });
+</script>
+{% endblock %} {% endcomment %}
